@@ -23,6 +23,7 @@ export class App implements OnInit {
   notes = signal<Note[]>([]);
   loading = signal(false);
   error = signal<string | null>(null);
+  successMessage = signal<string | null>(null);
 
   // Form state
   newContent = signal('');
@@ -55,7 +56,11 @@ export class App implements OnInit {
 
   addNote() {
     if (!this.newContent() || !this.newType()) return;
+
     this.creating.set(true);
+    this.error.set(null);
+    this.successMessage.set(null);
+
     this.noteService.createNote({
       content: this.newContent(),
       type: this.newType()
@@ -71,6 +76,9 @@ export class App implements OnInit {
         } else {
           this.loadNotes();
         }
+
+        this.successMessage.set('Catatan berhasil ditambahkan!');
+        setTimeout(() => this.successMessage.set(null), 3000); // hide after 3s
       },
       error: () => {
         this.error.set('Gagal menambah note');
@@ -80,9 +88,14 @@ export class App implements OnInit {
   }
 
   removeNote(id: string) {
+    this.error.set(null);
+    this.successMessage.set(null);
+
     this.noteService.deleteNote(id).subscribe({
       next: () => {
+        this.successMessage.set('Catatan berhasil dihapus!');
         this.loadNotes();
+        setTimeout(() => this.successMessage.set(null), 3000);
       },
       error: () => {
         this.error.set('Gagal menghapus note');

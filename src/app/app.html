@@ -18,9 +18,13 @@
       <button type="submit" [disabled]="creating() || !newContent()">Tambah</button>
     </form>
 
-    <div *ngIf="loading()">Loading...</div>
+    <!-- ✅ Tambahan Pesan Sukses -->
+    <div *ngIf="successMessage()" class="success">{{ successMessage() }}</div>
+
+    <!-- Sudah ada: Error -->
     <div *ngIf="error()" class="error">{{ error() }}</div>
 
+    <!-- Daftar Notes -->
     <ul class="note-list">
       <li *ngFor="let note of notes(); trackBy: trackById" class="note-item">
         <div>
@@ -34,51 +38,53 @@
 </main>
 
 <style>
-.notes-app {
-  max-width: 500px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px #0001;
-  padding: 2rem;
-}
-.note-form {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-.note-form textarea {
-  flex: 2;
-  resize: vertical;
-}
-.note-form select, .note-form button {
-  flex: 1;
-  min-width: 100px;
-}
-.note-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.note-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #eee;
-}
-.note-item:last-child {
-  border-bottom: none;
-}
-.created-at {
-  font-size: 0.8em;
-  color: #888;
-}
-.error {
-  color: #d00;
-  margin-bottom: 1rem;
-}
+  .notes-app {
+    max-width: 500px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px #0001;
+    padding: 2rem;
+  }
+  .note-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .note-form textarea {
+    flex: 2;
+    resize: vertical;
+  }
+  .note-form select, .note-form button {
+    flex: 1;
+    min-width: 100px;
+  }
+  .note-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .note-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  .note-item:last-child {
+    border-bottom: none;
+  }
+  .created-at {
+    font-size: 0.8em;
+    color: #888;
+  }
+  .error {
+    color: #d00;
+    margin-bottom: 1rem;
+  }
+  .success {
+    color: green;
+    margin-bottom: 1rem;
+  }
 </style>
-
-
