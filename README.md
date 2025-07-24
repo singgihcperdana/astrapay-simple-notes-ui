@@ -1,60 +1,56 @@
 # Astrapay Simple Notes UI
 
-Aplikasi catatan sederhana menggunakan Angular (frontend) dan Spring Boot (backend).
+A simple notes application built with Angular (frontend) and Spring Boot (backend).
 
-## Prasyarat
+## Prerequisites
+
 - Node.js & npm
-- Angular CLI (opsional, untuk development)
-- Java (untuk backend Spring Boot)
+- Angular CLI (optional, for development)
+- Java (for backend – Spring Boot)
 
-## Menjalankan Frontend (Angular)
+## Running the Frontend (Angular)
 
 1. **Install dependencies**
    ```sh
    npm install
    ```
-2. **Jalankan aplikasi**
+
+2. **Start the application**
    ```sh
    npm start
-   # atau
+   # or
    npx ng serve
    ```
-3. **Buka di browser**
-   [http://localhost:4200](http://localhost:4200)
 
-## Menjalankan Backend (Spring Boot)
+3. **Open in browser**  
+   Visit [http://localhost:4200](http://localhost:4200)
 
-1. Masuk ke folder backend (misal: `astrapay-notes-backend`)
-2. Jalankan aplikasi Spring Boot:
-   ```sh
-   ./mvnw spring-boot:run
-   # atau
-   mvn spring-boot:run
-   # atau
-   ./gradlew bootRun
-   ```
-3. Backend berjalan di [http://localhost:8080](http://localhost:8080)
+## Backend
+
+> The backend service is available at:  
+> [https://github.com/singgihcperdana/astrapay-simple-notes](https://github.com/singgihcperdana/astrapay-simple-notes)
+
+Please refer to that repository for instructions on running and testing the backend.
 
 ## Testing
 
 ### Frontend (Angular)
 ```sh
 npm test
-# atau
+# or
 ng test
 ```
 
-### Backend (Spring Boot)
-Jalankan test dengan Maven/Gradle sesuai project backend.
+## Features
 
-## Fitur
-- Lihat daftar notes
-- Tambah note baru
-- Hapus note
-- Notes otomatis terurut terbaru di atas
+- View list of notes
+- Add new note
+- Delete note
+- Notes are sorted with the newest at the top
 
 ---
 
-**Catatan:**
-- Pastikan backend sudah berjalan sebelum menggunakan aplikasi frontend.
-- Jika port backend berbeda, update URL di `note.service.ts`.
+**Notes:**
+
+- Ensure the backend is running before using the frontend.
+- If the backend uses a different port, update the API URL in `note.service.ts`.
