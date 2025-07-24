@@ -1,11 +1,96 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, effect, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NoteService } from './note.service';
+
+interface Note {
+  id: string;
+  content: string;
+  type: NoteType;
+  createdAt: string;
+}
+
+type NoteType = 'PERSONAL' | 'WORK' | 'REMINDER' | 'OTHER';
 
 @Component({
   selector: 'app-root',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('astrapay-simple-notes-ui');
+
+  notes = signal<Note[]>([]);
+  loading = signal(false);
+  error = signal<string | null>(null);
+
+  // Form state
+  newContent = signal('');
+  newType = signal<NoteType>('PERSONAL');
+  creating = signal(false);
+
+  noteTypes: NoteType[] = ['PERSONAL', 'WORK', 'REMINDER', 'OTHER'];
+
+  constructor(private noteService: NoteService) {}
+
+  ngOnInit() {
+    this.loadNotes();
+  }
+
+  loadNotes() {
+    this.loading.set(true);
+    this.error.set(null);
+    this.noteService.getNotes().subscribe({
+      next: (res: any) => {
+        const notes = (res.data || []).slice().sort((a: Note, b: Note) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        this.notes.set(notes);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set('Gagal mengambil data notes');
+        this.loading.set(false);
+      }
+    });
+  }
+
+  addNote() {
+    if (!this.newContent() || !this.newType()) return;
+    this.creating.set(true);
+    this.noteService.createNote({
+      content: this.newContent(),
+      type: this.newType()
+    }).subscribe({
+      next: (res: any) => {
+        this.newContent.set('');
+        this.newType.set('PERSONAL');
+        this.creating.set(false);
+        // Tambahkan note baru ke urutan teratas
+        const newNote = res.data;
+        if (newNote) {
+          this.notes.set([newNote, ...this.notes()]);
+        } else {
+          this.loadNotes();
+        }
+      },
+      error: () => {
+        this.error.set('Gagal menambah note');
+        this.creating.set(false);
+      }
+    });
+  }
+
+  removeNote(id: string) {
+    this.noteService.deleteNote(id).subscribe({
+      next: () => {
+        this.loadNotes();
+      },
+      error: () => {
+        this.error.set('Gagal menghapus note');
+      }
+    });
+  }
+
+  trackById(index: number, note: Note) {
+    return note.id;
+  }
 }
